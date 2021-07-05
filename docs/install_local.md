@@ -23,3 +23,7 @@ sudo apt install libopencv-dev
 sudo apt install libatlas-base-dev
 sudo apt-get install libopenblas-dev
 ```
+
+```
+NumPy ver. 1.21.0 found (include: /home/devy/.local/lib/python3.8/site-packages/numpy/core/include)
+```
