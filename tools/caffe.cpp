@@ -709,6 +709,8 @@ int main(int argc, char** argv) {
   LOG(INFO) << "Arguments: " << os.str();
 
   if (argc == 2) {
+      // 若训练 caffe 的命令行为 ./build/tools/caffe train
+      // 则这里 g_brew_map 的 key 值为 argv[1]，也即是 'train'，则实际调用了 train()
 #ifdef WITH_PYTHON_LAYER
     try {
       Py_InitializeEx(0);
