@@ -34,6 +34,7 @@ int main(int argc, char** argv) {
 }
 ```
 2. RegisterBrewFunction 宏定义
+参考1，2
 ```c++
 #define RegisterBrewFunction(func) \
 namespace { \
