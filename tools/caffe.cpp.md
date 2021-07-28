@@ -3,6 +3,15 @@
 ## 首先从主函数main()开始
 1. main()函数
 ```c++
+FLAGS_alsologtostderr = 1;
+```
+调用了`DECLARE_bool(alsologtostderr);`定义了一个flB命名空间下的bool变量FLAGS_alsologtostderr,并对其赋值为true
+意思是:
+```c++
+FLAGS_alsologtostderr = 1;  //设置日志消息除了日志文件之外是否去标准输出
+```
+
+```c++
 int main(int argc, char** argv) {
   // Run tool or show usage.
   caffe::GlobalInit(&argc, &argv);
@@ -49,5 +58,6 @@ static BrewFunction GetBrewFunction(const caffe::string& name) {
 
 
 ## 参考链接
-* https://blog.csdn.net/s_sunnyy/category_6381314.html
-* https://blog.csdn.net/s_sunnyy/article/details/78247827
+* 1 https://blog.csdn.net/s_sunnyy/category_6381314.html
+* 2 https://blog.csdn.net/s_sunnyy/article/details/78247827
+* 3 [用于控制链接库总函数对外是否可见](https://blog.csdn.net/mutourenzhang/article/details/47803803)
