@@ -2,6 +2,7 @@
 
 ## 首先从主函数main()开始
 1. main()函数
+参考3,4
 ```c++
 FLAGS_alsologtostderr = 1;
 ```
@@ -61,3 +62,5 @@ static BrewFunction GetBrewFunction(const caffe::string& name) {
 * 1 https://blog.csdn.net/s_sunnyy/category_6381314.html
 * 2 https://blog.csdn.net/s_sunnyy/article/details/78247827
 * 3 [用于控制链接库总函数对外是否可见](https://blog.csdn.net/mutourenzhang/article/details/47803803)
+* 4 [glog日志输出](https://www.cnblogs.com/hiloves/p/6009707.html)
+* 
