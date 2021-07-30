@@ -2,6 +2,7 @@
 
 ## 安装依赖库
 ```bash
+sudo apt update
 sudo apt-get install libturbojpeg libturbojpeg0-dev
 sudo ln -s /usr/lib/x86_64-linux-gnu/libturbojpeg.so.0.1.0 /usr/lib/x86_64-linux-gnu/libturbojpeg.so
 sudo apt-get install libboost-all-dev
@@ -22,6 +23,9 @@ sudo apt-get install -y libsnappy-dev
 sudo apt install libopencv-dev
 sudo apt install libatlas-base-dev
 sudo apt-get install libopenblas-dev
+sudo apt install libgoogle-glog-dev
+sudo apt-get install libgflags-dev
+
 ```
 
 ```
