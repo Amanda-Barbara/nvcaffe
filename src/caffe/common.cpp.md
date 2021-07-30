@@ -24,6 +24,11 @@ cudaDeviceProp device_prop;
                << "' has compute capability " << device_prop.major << "." << device_prop.minor;
   }
 ```
+## thread_local
+```c++
+static thread_local Caffe caffe;
+```
+* 使用thread_local标识符修饰的变量caffe使得每个线程拥有其自身的对象实例，进而达到线程安全
 
 ## 参考链接
 * 1 [google的gflags解析命令行参数](https://blog.csdn.net/zhouyusong_bupt/article/details/51576612)

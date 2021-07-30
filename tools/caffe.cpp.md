@@ -2,40 +2,52 @@
 
 ## 首先从主函数main()开始
 1. main()函数
-参考3,4
 ```c++
-FLAGS_alsologtostderr = 1;
+FLAGS_alsologtostderr = 1; //参考3,4
 ```
 调用了`DECLARE_bool(alsologtostderr);`定义了一个flB命名空间下的bool变量FLAGS_alsologtostderr,并对其赋值为true
 意思是:
 ```c++
 FLAGS_alsologtostderr = 1;  //设置日志消息除了日志文件之外是否去标准输出
 ```
-
+## Properties类
+* 通过Properties获取caffe、cudnn、cublas、cuda软件版本以及nvidia-gpu设备信息
 ```c++
-int main(int argc, char** argv) {
-  // Run tool or show usage.
-  caffe::GlobalInit(&argc, &argv);
-  // 设置设备
-  vector<int> gpus;
-  get_gpus(&gpus);
-#ifndef CPU_ONLY
-  if (gpus.size() > 0) {
-    Caffe::SetDevice(gpus[0]);
-  }
+Caffe::Properties& props = Caffe::props();
+```
+## Py_InitializeEx
+* 这段代码没看懂，需要跟进
+```c++
+#ifdef WITH_PYTHON_LAYER
+    try {
+      Py_InitializeEx(0);
+      if (!PyEval_ThreadsInitialized()) {
+        PyEval_InitThreads();
+        static PyThreadState* mainPyThread = PyEval_SaveThread();
+        (void)mainPyThread;
+      }
 #endif
-  if (argc == 2) {
-      // 若训练 caffe 的命令行为 ./build/tools/caffe train
-      // 则这里 g_brew_map 的 key 值为 argv[1]，也即是 'train'，则实际调用了 train()
-      return GetBrewFunction(caffe::string(argv[1]))();  // ------->
+```
+## GetBrewFunction() 函数
+* GetBrewFunction() 函数返回 g_brew_map[name], 即返回需要实现功能的函数
+```c++
+static BrewFunction GetBrewFunction(const string& name) {
+  if (g_brew_map.count(name)) {
+    return g_brew_map[name];
   } else {
-    gflags::ShowUsageWithFlagsRestrict(argv[0], "tools/caffe");
+    LOG(ERROR) << "Available caffe actions:";
+    for (BrewMap::iterator it = g_brew_map.begin();
+         it != g_brew_map.end(); ++it) {
+      LOG(ERROR) << "\t" << it->first;
+    }
+    LOG(FATAL) << "Unknown action: " << name;
+    return NULL;  // not reachable, just to suppress old compiler warnings.
   }
 }
 ```
-2. RegisterBrewFunction 宏定义
-参考1，2
+## RegisterBrewFunction 宏定义
 ```c++
+// 参考1，2
 #define RegisterBrewFunction(func) \
 namespace { \
 class __Registerer_##func { \
@@ -47,17 +59,16 @@ class __Registerer_##func { \
 __Registerer_##func g_registerer_##func; \
 }
 ```
-3. GetBrewFunction() 函数  
-* GetBrewFunction() 函数返回 g_brew_map[name], 即返回需要实现功能的函数
+## BrewFunction函数指针
+* 使用`typedef`定义一个名为BrewFunction函数指针类型，返回一个指向int类型的指针
 ```c++
-static BrewFunction GetBrewFunction(const caffe::string& name) {
-  if (g_brew_map.count(name)) {
-    return g_brew_map[name];
-  }
-}  
+typedef int (*BrewFunction)();
 ```
-
-
+## BrewMap
+* 使用`typedef`定义一个map类型的数据结构`BrewMap`
+```c++
+typedef std::map<std::string, BrewFunction> BrewMap;
+```
 
 ## 参考链接
 * 1 https://blog.csdn.net/s_sunnyy/category_6381314.html
