@@ -3,7 +3,8 @@
 参考1
 ```c++
 // Google flags.
-  ::gflags::ParseCommandLineFlags(pargc, pargv, true); //解析命令行参数
+// 解析命令行参数，把caffe.cpp中通过DEFINE_*定义的变量都转换成以FLAGS_为前缀的命令行参数
+  ::gflags::ParseCommandLineFlags(pargc, pargv, true); 
   // Google logging.
   ::google::InitGoogleLogging(*(pargv)[0]);
 ```
@@ -12,3 +13,4 @@
 
 ## 参考链接
 * 1 [google的gflags解析命令行参数](https://blog.csdn.net/zhouyusong_bupt/article/details/51576612)
+* 
