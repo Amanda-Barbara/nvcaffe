@@ -28,6 +28,17 @@ Caffe::Properties& props = Caffe::props();
       }
 #endif
 ```
+## BrewFunction函数指针
+* 使用`typedef`定义一个名为BrewFunction函数指针类型，返回一个指向int类型的指针
+```c++
+typedef int (*BrewFunction)();
+```
+## BrewMap
+* 使用`typedef`定义一个map类型的数据结构`BrewMap`
+```c++
+typedef std::map<std::string, BrewFunction> BrewMap;
+```
+
 ## GetBrewFunction() 函数
 * GetBrewFunction() 函数返回 g_brew_map[name], 即返回需要实现功能的函数
 ```c++
@@ -46,11 +57,6 @@ static BrewFunction GetBrewFunction(const string& name) {
 }
 ```
 ## RegisterBrewFunction 宏定义
-* 通过`RegisterBrewFunction`宏定义声明了`__Registerer_##func`类型，
-并基于此类实例化了`g_registerer_##func`对象，
-该类型的构造函数把函数指针类型的`func`添加到全局变量
-g_brew_map的值中，
-* ![](./docs/RegisterBrewFunction.png)
 ```c++
 // 参考1，2
 #define RegisterBrewFunction(func) \
@@ -64,16 +70,19 @@ class __Registerer_##func { \
 __Registerer_##func g_registerer_##func; \
 }
 ```
-## BrewFunction函数指针
-* 使用`typedef`定义一个名为BrewFunction函数指针类型，返回一个指向int类型的指针
+* 通过`RegisterBrewFunction`宏定义声明了`__Registerer_##func`类型，
+并基于此类实例化了`g_registerer_##func`对象，
+该类型的构造函数把函数指针类型的`func`添加到全局变量
+g_brew_map的值中，
+* 执行如下代码，
 ```c++
-typedef int (*BrewFunction)();
+RegisterBrewFunction(device_query);
+RegisterBrewFunction(train);
+RegisterBrewFunction(test);
+RegisterBrewFunction(test_detection);
+RegisterBrewFunction(time);
 ```
-## BrewMap
-* 使用`typedef`定义一个map类型的数据结构`BrewMap`
-```c++
-typedef std::map<std::string, BrewFunction> BrewMap;
-```
+![](./docs/RegisterBrewFunction.png)
 
 ## 参考链接
 * 1 https://blog.csdn.net/s_sunnyy/category_6381314.html

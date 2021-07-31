@@ -27,6 +27,11 @@ sudo apt install libgoogle-glog-dev
 sudo apt-get install libgflags-dev
 
 ```
+* 如果使用cudnn，则需要继续安装以下依赖包：
+```c++
+sudo dpkg -i libcudnn8_8.2.1.32-1+cuda11.3_amd64.deb
+sudo dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
+```
 
 ## cmake process
 ```
