@@ -75,4 +75,5 @@ typedef std::map<std::string, BrewFunction> BrewMap;
 * 2 https://blog.csdn.net/s_sunnyy/article/details/78247827
 * 3 [用于控制链接库总函数对外是否可见](https://blog.csdn.net/mutourenzhang/article/details/47803803)
 * 4 [glog日志输出](https://www.cnblogs.com/hiloves/p/6009707.html)
+* 5 [gdb调试指南](https://blog.csdn.net/taolusi/article/details/81074117)
 * 
