@@ -46,6 +46,11 @@ static BrewFunction GetBrewFunction(const string& name) {
 }
 ```
 ## RegisterBrewFunction 宏定义
+* 通过`RegisterBrewFunction`宏定义声明了`__Registerer_##func`类型，
+并基于此类实例化了`g_registerer_##func`对象，
+该类型的构造函数把函数指针类型的`func`添加到全局变量
+g_brew_map的值中，
+* ![](./docs/RegisterBrewFunction.png)
 ```c++
 // 参考1，2
 #define RegisterBrewFunction(func) \
@@ -76,4 +81,4 @@ typedef std::map<std::string, BrewFunction> BrewMap;
 * 3 [用于控制链接库总函数对外是否可见](https://blog.csdn.net/mutourenzhang/article/details/47803803)
 * 4 [glog日志输出](https://www.cnblogs.com/hiloves/p/6009707.html)
 * 5 [gdb调试指南](https://blog.csdn.net/taolusi/article/details/81074117)
-* 
+* 6 
