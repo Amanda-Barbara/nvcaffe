@@ -67,7 +67,7 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Found JPEGTurbo: /usr/include  
 -- Found JPEGTurbo  (include: /usr/include, library: /usr/lib/x86_64-linux-gnu/libturbojpeg.so.0)
 -- CUDA detected: 11.3
--- Found CUDNN: /usr/local/cuda/lib64/libcudnn.so (found version "???") 
+-- Found CUDNN: /usr/local/cuda/lib64/libcudnn.so (found version "8.2.1") 
 -- Added CUDA NVCC flags for: sm_75
 -- Found OpenCV: /usr (found version "4.2.0") found components: core imgcodecs highgui imgproc videoio 
 -- Found OpenCV 3.x: /usr/lib/x86_64-linux-gnu/cmake/opencv4
