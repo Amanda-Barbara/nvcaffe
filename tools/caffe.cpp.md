@@ -94,7 +94,32 @@ caffe::SolverParameter solver_param = caffe::ReadSolverParamsFromTextFileOrDie(F
 solver_param.mutable_train_state()->set_level(FLAGS_level);
   for (int i = 0; i < stages.size(); i++) {
     solver_param.mutable_train_state()->add_stage(stages[i]);//protobuf的mutable_以及add_方法参考7
+    // 调用mutable_方法可以对train_state中的stage进行修改
   }
+```
+* proto文件中的SolverParameter类信息
+```c++
+message SolverParameter {
+    // The states for the train/test nets. Must be unspecified or
+    // specified once per net.
+    //
+    // By default, all states will have solver = true;
+    // train_state will have phase = TRAIN,
+    // and all test_state's will have phase = TEST.
+    // Other defaults are set according to the NetState defaults.
+    optional NetState train_state = 26;
+    repeated NetState test_state = 27;
+}
+enum Phase {
+   TRAIN = 0;
+   TEST = 1;
+}
+
+message NetState {
+  optional Phase phase = 1 [default = TEST];
+  optional int32 level = 2 [default = 0];
+  repeated string stage = 3;
+}
 ```
 ## 设置GPU参数
 * 从输入参数FLAGS_gpu中解析并设置被调用的GPU设备参数，
@@ -117,7 +142,52 @@ static void get_gpus(vector<int>* gpus) {
   }
 }
 ```
+## 读取GPU设备属性
+```c++
+cudaDeviceProp device_prop;
+    for (int i = 0; i < gpus.size(); ++i) {
+      cudaGetDeviceProperties(&device_prop, gpus[i]);
+      LOG(INFO) << "GPU " << gpus[i] << ": " << device_prop.name;
+    }
+```
+* gdb中执行`p device_prop`命令显示如下：
+<details><summary>展开/收起</summary>
+<pre><code>
+$26 = {name = {78 'N', 86 'V', 73 'I', 68 'D', 73 'I', 65 'A', 32 ' ', 71 'G', 101 'e', 70 'F', 111 'o', 114 'r', 99 'c', 101 'e', 32 ' ', 71 'G', 84 'T', 88 'X', 32 ' ', 49 '1', 54 '6', 54 '6', 48 '0', 32 ' ', 83 'S', 85 'U', 80 'P', 69 'E', 82 'R', }, 
+       luidDeviceNodeMask = 0, totalGlobalMem = 6232997888, sharedMemPerBlock = 49152, regsPerBlock = 65536, warpSize = 32, 
+       memPitch = 2147483647, maxThreadsPerBlock = 1024, maxThreadsDim = {1024, 1024, 64}, 
+       maxGridSize = {2147483647, 65535, 65535}, clockRate = 1785000, totalConstMem = 65536, major = 7, minor = 5, 
+       textureAlignment = 512, texturePitchAlignment = 32, deviceOverlap = 1, multiProcessorCount = 22, 
+       kernelExecTimeoutEnabled = 1, integrated = 0, canMapHostMemory = 1, computeMode = 0, maxTexture1D = 131072, 
+       maxTexture1DMipmap = 32768, maxTexture1DLinear = 268435456, maxTexture2D = {131072, 65536}, 
+       maxTexture2DMipmap = {32768, 32768}, maxTexture2DLinear = {131072, 65000, 2097120}, 
+       maxTexture2DGather = {32768, 32768}, maxTexture3D = {16384, 16384, 16384}, maxTexture3DAlt = {8192, 8192, 32768}, 
+       maxTextureCubemap = 32768, maxTexture1DLayered = {32768, 2048}, maxTexture2DLayered = {32768, 32768, 2048}, 
+       maxTextureCubemapLayered = {32768, 2046}, maxSurface1D = 32768, maxSurface2D = {131072, 65536}, 
+       maxSurface3D = {16384, 16384, 16384}, maxSurface1DLayered = {32768, 2048}, maxSurface2DLayered = {32768, 32768, 2048}, 
+       maxSurfaceCubemap = 32768, maxSurfaceCubemapLayered = {32768, 2046}, surfaceAlignment = 512, concurrentKernels = 1, 
+       ECCEnabled = 0, pciBusID = 1, pciDeviceID = 0, pciDomainID = 0, tccDriver = 0, asyncEngineCount = 3, 
+       unifiedAddressing = 1, memoryClockRate = 7001000, memoryBusWidth = 192, l2CacheSize = 1572864, 
+       persistingL2CacheMaxSize = 0, maxThreadsPerMultiProcessor = 1024, streamPrioritiesSupported = 1, 
+       globalL1CacheSupported = 1, localL1CacheSupported = 1, sharedMemPerMultiprocessor = 65536, 
+       regsPerMultiprocessor = 65536, managedMemory = 1, isMultiGpuBoard = 0, multiGpuBoardGroupID = 0, 
+       hostNativeAtomicSupported = 0, singleToDoublePrecisionPerfRatio = 32, pageableMemoryAccess = 0, 
+       concurrentManagedAccess = 1, computePreemptionSupported = 1, canUseHostPointerForRegisteredMem = 1, 
+       cooperativeLaunch = 1, cooperativeMultiDeviceLaunch = 1, sharedMemPerBlockOptin = 65536, 
+       pageableMemoryAccessUsesHostPageTables = 0, directManagedMemAccessFromHost = 0, maxBlocksPerMultiProcessor = 16, 
+       accessPolicyMaxWindowSize = 0, reservedSharedMemPerBlock = 0}
+</code></pre>
+</details>  
 
+## cuda绑定GPU设备
+```c++
+Caffe::SetDevice(gpus[0]);
+
+void Caffe::SetDevice(const int device_id) {
+  root_device_ = device_id;
+  CUDA_CHECK(cudaSetDevice(root_device_));
+}
+```
 
 ## 参考链接
 * 1 https://blog.csdn.net/s_sunnyy/category_6381314.html
