@@ -90,4 +90,4 @@ RegisterBrewFunction(time);
 * 3 [用于控制链接库总函数对外是否可见](https://blog.csdn.net/mutourenzhang/article/details/47803803)
 * 4 [glog日志输出](https://www.cnblogs.com/hiloves/p/6009707.html)
 * 5 [gdb调试指南](https://blog.csdn.net/taolusi/article/details/81074117)
-* 6 
+* 6 [glog关于`<<`运算符的重载](https://www.cnblogs.com/zhoug2020/p/5884598.html)
