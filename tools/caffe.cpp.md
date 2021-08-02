@@ -84,6 +84,41 @@ RegisterBrewFunction(time);
 ```
 ![](./docs/RegisterBrewFunction.png)
 
+## ReadSolverParamsFromTextFileOrDie
+* 从参数`FLAGS_solver`中读取网络训练所需的配置的文件并返回一个`SolverParameter`类型的对象solver_param
+```c++
+caffe::SolverParameter solver_param = caffe::ReadSolverParamsFromTextFileOrDie(FLAGS_solver);
+```
+## 添加网络训练阶段信息
+```c++
+solver_param.mutable_train_state()->set_level(FLAGS_level);
+  for (int i = 0; i < stages.size(); i++) {
+    solver_param.mutable_train_state()->add_stage(stages[i]);//protobuf的mutable_以及add_方法参考7
+  }
+```
+## 设置GPU参数
+* 从输入参数FLAGS_gpu中解析并设置被调用的GPU设备参数，
+```c++
+// Parse GPU ids or use all available devices
+static void get_gpus(vector<int>* gpus) {
+  if (FLAGS_gpu == "all") {
+    const int count = Caffe::device_count();
+    for (int i = 0; i < count; ++i) {
+      gpus->push_back(i);
+    }
+  } else if (FLAGS_gpu.size()) {
+    vector<string> strings;
+    boost::split(strings, FLAGS_gpu, boost::is_any_of(", "));
+    for (int i = 0; i < strings.size(); ++i) {
+      gpus->push_back(boost::lexical_cast<int>(strings[i]));
+    }
+  } else {
+    CHECK_EQ(gpus->size(), 0);
+  }
+}
+```
+
+
 ## 参考链接
 * 1 https://blog.csdn.net/s_sunnyy/category_6381314.html
 * 2 https://blog.csdn.net/s_sunnyy/article/details/78247827
@@ -91,3 +126,4 @@ RegisterBrewFunction(time);
 * 4 [glog日志输出](https://www.cnblogs.com/hiloves/p/6009707.html)
 * 5 [gdb调试指南](https://blog.csdn.net/taolusi/article/details/81074117)
 * 6 [glog关于`<<`运算符的重载](https://www.cnblogs.com/zhoug2020/p/5884598.html)
+* 7 [protobuf关于mutable_属性方法的调用](https://blog.csdn.net/liuxiao723846/article/details/105564742)
