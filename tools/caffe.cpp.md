@@ -190,8 +190,8 @@ void Caffe::SetDevice(const int device_id) {
 ```
 
 ## 参考链接
-* 1 https://blog.csdn.net/s_sunnyy/category_6381314.html
-* 2 https://blog.csdn.net/s_sunnyy/article/details/78247827
+* 1 [nvcaffe代码解读](https://blog.csdn.net/s_sunnyy/category_6381314.html)
+* 2 [nvcaffe代码解读](https://blog.csdn.net/s_sunnyy/article/details/78247827)
 * 3 [用于控制链接库总函数对外是否可见](https://blog.csdn.net/mutourenzhang/article/details/47803803)
 * 4 [glog日志输出](https://www.cnblogs.com/hiloves/p/6009707.html)
 * 5 [gdb调试指南](https://blog.csdn.net/taolusi/article/details/81074117)
