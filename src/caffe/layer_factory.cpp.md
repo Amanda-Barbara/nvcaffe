@@ -17,8 +17,8 @@ REGISTER_LAYER_CREATOR(Convolution, GetConvolutionLayer);
 `LayerRegisterer`构造函数调用了`LayerRegistry`类型的静态成员函数`AddCreator()`，`AddCreator()`静态成员函数调用了
 `LayerRegistry`类型的静态成员函数`Registry()`，`Registry()`静态成员函数定义了一个`CreatorRegistry`类型的静态局部变量
 `g_registry_`并返回赋值给静态成员函数`AddCreator()`中定义的`CreatorRegistry&`类型的`registry`变量，
-`CreatorRegistry`类型是使用`typedef`关键字定义的`std::map<string, Creator>`数据结构类型，
-
+`CreatorRegistry`类型是使用`typedef`关键字定义的`std::map<string, Creator>`数据结构类型，程序执行到静态变量的定义时只初始化一次，
+  
 ```c++
 LayerRegistry::AddCreator(type, creator);
 ```
