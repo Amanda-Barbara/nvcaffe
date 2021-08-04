@@ -74,6 +74,49 @@ class LayerBase {
 * 进一步解释了为什么在函数模板`CreateLayerBase()`中可以使用`ptr.reset(new LType<float, float>(param, solver_rank));`
 这样的语句进行执行，虽然`LayerBase`不是模板类，但继承`LayerBase`的类都是接收`Layer<Ftype, Btype>`模板参数的类模板
   
+## 注册完所有的`Layer`类型名以及所用到的函数指针
+![](../../tools/docs/nvcaffe_solver_layer_init.png)
+## 调用`LayerRegistry`类的静态成员函数`CreateLayer()`
+```c++
+static shared_ptr<LayerBase> CreateLayer(const LayerParameter& param, size_t solver_rank) {
+    const string& layer_type = param.type();
+    const string& layer_name = param.name();
+    if (Caffe::root_solver()) {
+      LOG(INFO) << "Creating layer '" << layer_name << "' of type '" << layer_type << "'";
+    }
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(layer_type), 1) << "Unknown layer type: '" << layer_type
+        << "' (known types: " << LayerTypeListString() << ")";
+
+    //  We compose these types in Net::Init
+    Type ftype = param.forward_type();
+    Type btype = param.backward_type();
+    Type fmath = param.forward_math();
+    Type bmath = param.backward_math();
+    if (Caffe::root_solver()) {
+      LOG(INFO) << "Layer's types are Ftype:" << Type_Name(ftype)
+          << " Btype:" << Type_Name(btype)
+          << " Fmath:" << Type_Name(fmath)
+          << " Bmath:" << Type_Name(bmath);
+    }
+    return registry[layer_type](param, ftype, btype, solver_rank);
+  }
+```
+* 调用`registry[layer_type](param, ftype, btype, solver_rank);`，
+  `registry[layer_type]`是一个`typedef shared_ptr<LayerBase> (*Creator)(const LayerParameter&, Type, Type, size_t);`类型的函数指针
+  
+## 以`Data`为例梳理各种`Layer`创建流程
+![](./docs/CreatorLayer.png)
+
+* [执行`LayerRegistry::CreateLayer()`静态成员函数](../../src/caffe/net.cpp#L202)->
+  [`CreateLayer()`静态成员函数执行return registry[layer_type](param, ftype, btype, solver_rank);](./layer_factory.hpp#L189)->
+  [`registry[layer_type]`是在宏定义中REGISTER_LAYER_CLASS_R(Data);已经注册](layer_factory.hpp#L240)
+  
+```c++
+p layer_param.type()
+$3 = "Data"
+        
+```
 ## 参考链接
 * 1 [模板的模板参数](https://www.jianshu.com/p/c94184e295d7)
 * 2 []()

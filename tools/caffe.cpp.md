@@ -1,7 +1,8 @@
 # caffe.cpp源码分析
 * nvcaffe关于layer初始化流程如下：  
-![](docs/nvcaffe_solver_layer_init.png)
-调试断点设置在`layer_factory.hpp`中的定义的函数模板`CreateLayerBase()`
+![](docs/nvcaffe_solver_layer_init.png)  
+[调试断点设置在`layer_factory.hpp`中的`return registry[layer_type](param, ftype, btype, solver_rank);`处](../include/caffe/layer_factory.hpp#L189)
+
   
 ## 首先从主函数main()开始
 1. main()函数
