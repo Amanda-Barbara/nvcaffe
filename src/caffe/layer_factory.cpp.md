@@ -1,5 +1,5 @@
 # layer_factory.cpp代码解析
-## REGISTER_LAYER_CREATOR宏定义
+## `REGISTER_LAYER_CREATOR`宏定义
 * 宏定义`REGISTER_LAYER_CREATOR`声明了`LayerRegisterer`类型的对象`g_creator_##type`，
 由于`g_creator_##type`是一个全局变量，因此程序执行在进入`main`函数之前会被定义
 ```c++
@@ -9,7 +9,7 @@
 ```c++
 REGISTER_LAYER_CREATOR(Convolution, GetConvolutionLayer);
 ```
-## 执行REGISTER_LAYER_CREATOR宏定义代码
+## 执行`REGISTER_LAYER_CREATOR`宏定义代码
 ```c++
 REGISTER_LAYER_CREATOR(Convolution, GetConvolutionLayer);
 ```
@@ -22,3 +22,24 @@ REGISTER_LAYER_CREATOR(Convolution, GetConvolutionLayer);
 ```c++
 LayerRegistry::AddCreator(type, creator);
 ```
+## 接下来按照同样的逻辑执行`REGISTER_LAYER_CREATOR()`代码
+```c++
+REGISTER_LAYER_CREATOR(BatchNorm, GetBatchNormLayer);
+REGISTER_LAYER_CREATOR(Pooling, GetPoolingLayer);
+REGISTER_LAYER_CREATOR(LRN, GetLRNLayer);
+REGISTER_LAYER_CREATOR(ReLU, GetReLULayer);
+...
+```
+## 接下来会执行`REGISTER_LAYER_CLASS`宏定义代码块
+```c++
+#define REGISTER_LAYER_CLASS(type)                                             \
+  shared_ptr<LayerBase> Creator_##type##Layer(const LayerParameter& param,     \
+      Type ftype, Type btype, size_t)                                          \
+  {                                                                            \
+    return CreateLayerBase<type##Layer>(param, ftype, btype);                  \
+  }                                                                            \
+  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
+```
+* `REGISTER_LAYER_CLASS(type)`宏定义中定义了一个名为`Creator_##type##Layer`函数，函数体是执行
+`CreateLayerBase<type##Layer>(param, ftype, btype);`并返回其执行结果，
+  
