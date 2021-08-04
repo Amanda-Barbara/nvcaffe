@@ -107,15 +107,45 @@ static shared_ptr<LayerBase> CreateLayer(const LayerParameter& param, size_t sol
   
 ## 以`Data`为例梳理各种`Layer`创建流程
 ![](./docs/CreatorLayer.png)
+```c++
+caffe::Layer<float, float>::Layer layer.cpp:51
+caffe::BaseDataLayer<float, float>::BaseDataLayer base_data_layer.cpp:49
+caffe::BasePrefetchingDataLayer<float, float>::BasePrefetchingDataLayer base_data_layer.cpp:76
+caffe::DataLayer<float, float>::DataLayer data_layer.cpp:12
+caffe::CreateLayerBase<caffe::DataLayer> layer_factory.hpp:109
+caffe::Creator_DataLayer data_layer.cpp:355
+caffe::LayerRegistry::CreateLayer layer_factory.hpp:189
+caffe::Net::Init net.cpp:202
+caffe::Net::Net net.cpp:41
+caffe::Solver::InitTrainNet solver.cpp:98
+caffe::Solver::Init solver.cpp:52
+caffe::Solver::Solver solver.cpp:31
+caffe::SGDSolver<float>::SGDSolver sgd_solvers.hpp:18
+caffe::Creator_SGDSolver sgd_solver.cpp:488
+caffe::SolverRegistry::CreateSolver solver_factory.hpp:79
+train caffe.cpp:236
+main caffe.cpp:723
+__libc_start_main 0x00007f411354e0b3
+_start 0x0000563c3809466e
+```
+* 函数模板`caffe::CreateLayerBase<caffe::DataLayer>`中的模板参数`caffe::DataLayer`是一个
+接受`typename Ftype, typename Btype>`模板参数的`caffe::DataLayer<float, float>::DataLayer`类模板，  
+```c++
+template<template <typename Ftype, typename Btype> class LType>
+inline shared_ptr<LayerBase> CreateLayerBase(const LayerParameter& param,
+    Type ftype, Type btype, size_t solver_rank) {}
+```
+这样使用的模板的好处是函数模板`caffe::CreateLayerBase<caffe::DataLayer>`可以接受一个自定义的类型，
+对这个自定义类型的要求是这个自定义的类型也是一个模板，并且这个自定义类模板的模板参数是`template <typename Ftype, typename Btype>`
 
-* [执行`LayerRegistry::CreateLayer()`静态成员函数](../../src/caffe/net.cpp#L202)->
-  [`CreateLayer()`静态成员函数执行return registry[layer_type](param, ftype, btype, solver_rank);](./layer_factory.hpp#L189)->
+* [执行`LayerRegistry::CreateLayer()`静态成员函数](../../src/caffe/net.cpp#L202)->  
+  [`CreateLayer()`静态成员函数执行return registry[layer_type](param, ftype, btype, solver_rank);](./layer_factory.hpp#L189)->  
   [`registry[layer_type]`是在宏定义中REGISTER_LAYER_CLASS_R(Data);已经注册](layer_factory.hpp#L240)
   
 ```c++
 p layer_param.type()
 $3 = "Data"
-        
+
 ```
 ## 参考链接
 * 1 [模板的模板参数](https://www.jianshu.com/p/c94184e295d7)
