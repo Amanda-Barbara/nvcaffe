@@ -136,7 +136,7 @@ inline shared_ptr<LayerBase> CreateLayerBase(const LayerParameter& param,
     Type ftype, Type btype, size_t solver_rank) {}
 ```
 这样使用的模板的好处是函数模板`caffe::CreateLayerBase<caffe::DataLayer>`可以接受一个自定义的类型，
-对这个自定义类型的要求是这个自定义的类型也是一个模板，并且这个自定义类模板的模板参数是`template <typename Ftype, typename Btype>`
+对这个自定义类型的要求是这个自定义的类型是一个类模板，并且这个自定义类模板的模板参数是`template <typename Ftype, typename Btype>`
 
 * [执行`LayerRegistry::CreateLayer()`静态成员函数](../../src/caffe/net.cpp#L202)->  
   [`CreateLayer()`静态成员函数执行return registry[layer_type](param, ftype, btype, solver_rank);](./layer_factory.hpp#L189)->  
