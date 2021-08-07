@@ -30,3 +30,5 @@ mutable std::condition_variable cv_;//参考4
 * 3 [mutable可变关键字](https://www.geeksforgeeks.org/c-mutable-keyword/)
 * 4 [condition_variable](https://study.163.com/course/courseLearn.htm?courseId=1006067356#/learn/video?lessonId=1053540121&courseId=1006067356)
 * 5 [mutex互斥量保证同一时间只能有一个线程可以对共享数据进行访问](https://study.163.com/course/courseLearn.htm?courseId=1006067356#/learn/video?lessonId=1053471354&courseId=1006067356)
+* 6 [condition_variable](https://en.cppreference.com/w/cpp/thread/condition_variable)
+* 7 [condition_variable](https://github.com/Amanda-Barbara/CPlusPlus-Tutorial/blob/master/concurrency/Threading_In_CPlusPlus/5.condition_variable/condition_variable_main.cpp)
