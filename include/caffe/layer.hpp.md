@@ -8,6 +8,11 @@ virtual void Reshape(const vector<Blob*>& bottom, const vector<Blob*>& top) = 0;
 中不能实例化
 * 纯虚函数一般多用于接口的封装，继承`LayerBase`基类的派生类来负责具体实现纯虚函数
 
+## override关键字重载
+* `ToProto()`函数必须重载基类`LayerBase`中的`ToProto()`函数
+```c++
+void ToProto(LayerParameter* param, bool write_diff = false) override;
+```
 
 ## 参考链接
 * 1 [virtual关键字运行时多态](https://www.geeksforgeeks.org/virtual-function-cpp/)
