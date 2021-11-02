@@ -260,4 +260,5 @@ using Params<Dtype>::diff_; // Gradient
 ## 参考链接
 * 1 [nvcaffe架构图](https://raw.githubusercontent.com/cjmcv/deeplearning-paper-notes/master/images/pdDLF/caffe_s1_1.png)
 * 2 [nvcaffe多GPU模式训练流程图](https://github.com/cjmcv/deeplearning-paper-notes/blob/master/images/pdDLF/caffe_s1_1.png)
-* 3 [分布式并行计算MapReduce](https://www.cnblogs.com/zyd1234/p/10966283.html)
+* 3 [nvcaffe多GPU模式训练流程图](https://cjmcv.github.io/deeplearning-paper-notes/fcdlf/2017/05/01/Caffe_S1.html)
+* 4 [分布式并行计算MapReduce](https://www.cnblogs.com/zyd1234/p/10966283.html)
