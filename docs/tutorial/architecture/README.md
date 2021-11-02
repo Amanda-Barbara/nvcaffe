@@ -1,6 +1,9 @@
 # nvcaffe架构
 ![](images/nvcaffe_architecture.png)
 
+* nvcaffe训练流程图
+![](images/nvcaffe_training_workflow.png)
+
 
 
 
