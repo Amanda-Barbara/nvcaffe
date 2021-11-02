@@ -29,7 +29,7 @@
 
 * BasePrefetchingDataLayer：数据预取数据层，继承于InternalThread和BaseDataLayer（继承于Layer），利用双堵塞队列和多线程的方式从内存预取数据到显存。
 
-* nvcaffe多GPU训练流程图
+##  nvcaffe多GPU训练流程图
 
 
 ![](images/nvcaffe_training_workflow.png)
@@ -259,3 +259,5 @@ using Params<Dtype>::diff_; // Gradient
 
 ## 参考链接
 * 1 [nvcaffe架构图](https://raw.githubusercontent.com/cjmcv/deeplearning-paper-notes/master/images/pdDLF/caffe_s1_1.png)
+* 2 [nvcaffe多GPU模式训练流程图](https://github.com/cjmcv/deeplearning-paper-notes/blob/master/images/pdDLF/caffe_s1_1.png)
+* 3 [分布式并行计算MapReduce](https://www.cnblogs.com/zyd1234/p/10966283.html)
