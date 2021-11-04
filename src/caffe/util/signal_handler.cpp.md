@@ -21,3 +21,5 @@ return boost::bind(&SignalHandler::CheckForSignals, this);
 * 1 [boost::bind使用教程](https://www.boost.org/doc/libs/1_66_0/libs/bind/doc/html/bind.html)
 * 2 [SignalHandler代码解析](https://alanse7en.github.io/caffedai-ma-jie-xi-4/)
 * 3 [信号的概念](https://www.freecplus.net/eec5c39aa63b45ad946f1cc08134d9f9.html)
+* 4 [进程的终止和挂起命令详解](https://www.cnblogs.com/machangwei-8/p/10391440.html)
+

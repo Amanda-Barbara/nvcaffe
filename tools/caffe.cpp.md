@@ -1,5 +1,20 @@
 # caffe.cpp源码分析
-* nvcaffe关于layer初始化流程如下：  
+
+## `caffe`命令行参数解析
+```c++
+DEFINE_string(sigint_effect, "stop",
+             "Optional; action to take when a SIGINT signal is received: "
+              "snapshot, stop or none.");
+DEFINE_string(sighup_effect, "snapshot",
+             "Optional; action to take when a SIGHUP signal is received: "
+             "snapshot, stop or none.");
+```
+* `sigint_effect`默认值为`stop`，即`caffe.bin`进程当遇到`ctrl+c`信号时将终止进程继续执行
+* `sighup_effect`默认值为`snapshot`，即`caffe.bin`进程当遇到`ctrl+z`信号时将被挂起，
+  可以执行`fg`命令使得被挂起的`caffe.bin`进程继续执行
+* `sigint_effect`和`sighup_effect`的值都被设置为`none`，即`caffe.bin`进程执行不会受到信号`ctrl+c`以及`ctrl+z`的影响
+
+## nvcaffe关于layer初始化流程如下：  
 ![](docs/nvcaffe_solver_layer_init.png)  
 [调试断点设置在`layer_factory.hpp`中的`return registry[layer_type](param, ftype, btype, solver_rank);`处](../include/caffe/layer_factory.hpp#L189)
 
