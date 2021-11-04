@@ -9,6 +9,12 @@ DEFINE_string(sighup_effect, "snapshot",
              "Optional; action to take when a SIGHUP signal is received: "
              "snapshot, stop or none.");
 ```
+```c++
+caffe::SignalHandler signal_handler(
+        GetRequestedAction(FLAGS_sigint_effect),
+        GetRequestedAction(FLAGS_sighup_effect));
+```
+* `SignalHandler`类对象`signal_handler`从命令行参数中获取到信号参数`FLAGS_sigint_effect`,`FLAGS_sighup_effect`
 * `sigint_effect`默认值为`stop`，即`caffe.bin`进程当遇到`ctrl+c`信号时将终止进程继续执行
 * `sighup_effect`默认值为`snapshot`，即`caffe.bin`进程当遇到`ctrl+z`信号时将被挂起，
   可以执行`fg`命令使得被挂起的`caffe.bin`进程继续执行
