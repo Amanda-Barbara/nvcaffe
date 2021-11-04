@@ -4,9 +4,11 @@
 ```c++
 typedef boost::function<SolverAction::Enum()> ActionCallback;
 ```
-* `boost::function`可以定义一个指针，指向具有特定签名的函数，上述定义了一个返回值类型为`SolverAction::Enum()`的
-  函数指针类型ActionCallback，匹配此签名的函数均可赋值给这个指针。
+* `boost::function`可以定义一个函数指针类型的对象，可以作为函数的返回值也可以作为函数的参数使用，
+  其作用是指向具有特定签名的函数，上述定义了一个返回值类型为`SolverAction::Enum()`的
+  函数指针类型`ActionCallback`，匹配此签名的函数均可赋值给这个函数指针。
 * `boost::function`是对如下使用`typedef`关键字定义的函数指针类型的封装
+
 ```c++
 typedef SolverAction::Enum (*ActionCallback)();
 ```

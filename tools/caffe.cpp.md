@@ -20,6 +20,9 @@ caffe::SignalHandler signal_handler(
   可以执行`fg`命令使得被挂起的`caffe.bin`进程继续执行
 * `sigint_effect`和`sighup_effect`的值都被设置为`none`，即`caffe.bin`进程执行不会受到信号`ctrl+c`以及`ctrl+z`的影响
 
+* `caffe`设置了两种信号`SIGHUP`、`SIGINT`的处理响应机制，分别为`stop`(进程终止)、`snapshot`(进程挂起)、
+  `none`(进程执行不受信号干扰)， 并对其他的信号处理进行了屏蔽操作
+
 ## nvcaffe关于layer初始化流程如下：  
 ![](docs/nvcaffe_solver_layer_init.png)  
 [调试断点设置在`layer_factory.hpp`中的`return registry[layer_type](param, ftype, btype, solver_rank);`处](../include/caffe/layer_factory.hpp#L189)
