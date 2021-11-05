@@ -24,6 +24,11 @@
     if (sigaction(SIGINT, &sa, NULL) == -1) {
       LOG(FATAL) << "Cannot install SIGINT handler.";
     }
+  /*
+   * 返回值：若成功则返回0，若出错则返回-1
+   * act指针非空, 则修改信号的动作;
+   * oact指针非空, 则返回该信号的上一个动作.
+   */
 ```
   
 ## boost::bind使用
@@ -44,6 +49,7 @@ return boost::bind(&SignalHandler::CheckForSignals, this);
 * 5 [不具名的命名空间相当于声明一个局部作用域](https://www.cnblogs.com/wkfvawl/p/10500594.html)
 * 6 [boost::bind绑定成员函数](https://www.cnblogs.com/blueoverflow/p/4740093.html)
 * 7 [信号sigaction视频详解](https://www.bilibili.com/video/BV145411a76x?p=6)
+* 8 [信号sigaction详解](http://zyan.cc/book/linux_c/html/ch33s04.html)
 
 
 
