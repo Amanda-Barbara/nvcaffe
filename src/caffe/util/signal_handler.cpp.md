@@ -25,6 +25,7 @@
       LOG(FATAL) << "Cannot install SIGINT handler.";
     }
   /*
+   * 对上述需要处理的信号进行注册，如果没有注册，则会执行系统的信号默认响应机制
    * 返回值：若成功则返回0，若出错则返回-1
    * act指针非空, 则修改信号的动作;
    * oact指针非空, 则返回该信号的上一个动作.
@@ -102,6 +103,34 @@ switch (signal) {
 `caffe-d`进程从其他终端获取`SIGHUP`信号，
 
 ![](../../../docs/tutorial/src/caffe/util/GotSIGHUP.png)
+
+## `UnhookHandler`函数
+* `UnhookHandler`函数的功能是恢复信号响应的系统默认处理机制
+
+```c++
+  // Set the signal handlers to the default.
+  void UnhookHandler() {
+    if (already_hooked_up) {
+      struct sigaction sa;
+      // Setup the sighub handler
+      sa.sa_handler = SIG_DFL;
+      // Restart the system call, if at all possible
+      sa.sa_flags = SA_RESTART;
+      // Block every signal during the handler
+      sigfillset(&sa.sa_mask);
+      // Intercept SIGHUP and SIGINT
+      if (sigaction(SIGHUP, &sa, NULL) == -1) {
+        LOG(FATAL) << "Cannot uninstall SIGHUP handler.";
+      }
+      if (sigaction(SIGINT, &sa, NULL) == -1) {
+        LOG(FATAL) << "Cannot uninstall SIGINT handler.";
+      }
+
+      already_hooked_up = false;
+    }
+  }
+
+```
 
 ## 参考链接
 * 1 [boost::bind使用教程](https://www.boost.org/doc/libs/1_66_0/libs/bind/doc/html/bind.html)
