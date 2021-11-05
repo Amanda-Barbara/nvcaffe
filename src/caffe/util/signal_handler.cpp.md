@@ -40,6 +40,68 @@ ActionCallback SignalHandler::GetActionFunction() const {
 return boost::bind(&SignalHandler::CheckForSignals, this);
 }
 ```
+## `CheckForSignals`函数
+* `CheckForSignals`负责把接收到的信号与设置的默认操作一一对应起来，如果没有信号发送过来，则返回`SolverAction::NONE`
+
+```c++
+SolverAction::Enum SignalHandler::CheckForSignals() const {
+  if (GotSIGHUP()) {
+    return SIGHUP_action_;// 当接收到`SIGHUP`信号时，返回`STOP`、`SNAPSHOT`、`NONE`其中的一种操作
+  }
+  if (GotSIGINT()) {
+    return SIGINT_action_;// 当接收到`SIGINT`信号时，返回`STOP`、`SNAPSHOT`、`NONE`其中的一种操作
+  }
+  return SolverAction::NONE;
+}
+```
+
+
+## `GotSIGHUP`与`GotSIGINT`函数
+```c++
+static volatile sig_atomic_t got_sigint = false;
+static volatile sig_atomic_t got_sighup = false;
+static bool already_hooked_up = false;
+
+// 负责把接收到的`int`类型的信号`signal`传递给`sig_atomic_t`类型的对象`got_sigint`、`got_sighup`
+void handle_signal(int signal) {
+switch (signal) {
+    case SIGHUP:
+    got_sighup = true;
+    break;
+    case SIGINT:
+    got_sigint = true;
+    break;
+    }
+}
+    
+  // Return true if a SIGINT has been received since the last time this
+  // function was called.
+  bool GotSIGINT() {
+    bool result = got_sigint;
+    got_sigint = false; //
+    return result;
+  }
+
+  // Return true iff a SIGHUP has been received since the last time this
+  // function was called.
+  bool GotSIGHUP() {
+    bool result = got_sighup;
+    got_sighup = false; // 如果接收`SIGHUP`信号的默认操作是`SNAPSHOT`，把参数`got_sighup`设置为`false`，
+                        // 可以避免每次迭代都要对模型参数进行保存操作
+    return result;
+  }
+}  // namespace
+```
+
+
+```shell
+./cmake-build-debug/tools/caffe-d train \
+--solver=examples/cifar10/cifar10_quick_solver.prototxt \
+--sighup_effect=snapshot --sigint_effect=snapshot
+```
+`caffe-d`进程从其他终端获取`SIGHUP`信号，
+
+![](../../../docs/tutorial/src/caffe/util/GotSIGHUP.png)
 
 ## 参考链接
 * 1 [boost::bind使用教程](https://www.boost.org/doc/libs/1_66_0/libs/bind/doc/html/bind.html)

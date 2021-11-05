@@ -15,13 +15,23 @@ caffe::SignalHandler signal_handler(
         GetRequestedAction(FLAGS_sighup_effect));
 ```
 * `SignalHandler`类对象`signal_handler`从命令行参数中获取到信号参数`FLAGS_sigint_effect`,`FLAGS_sighup_effect`
-* `sigint_effect`默认值为`stop`，即`caffe.bin`进程当遇到`ctrl+c`信号时将终止进程继续执行
-* `sighup_effect`默认值为`snapshot`，即`caffe.bin`进程当遇到`ctrl+z`信号时将被挂起，
+* `sigint_effect`默认值为`stop`，即`caffe.bin`进程当遇到`ctrl+c`即`SIGINT`信号时将终止进程继续执行
+* `sighup_effect`默认值为`snapshot`，即`caffe.bin`进程当遇到`SIGHUP`信号(终端意外挂断)时将执行保存模型参数的代码，
+```c++
+    SolverAction::Enum request = GetRequestedAction(); //响应信号并返回对应其设置的默认操作
+    // Save a snapshot if needed.
+    if ((param_.snapshot() && iter_ % param_.snapshot() == 0 && rank_ == 0) ||
+        request == SolverAction::SNAPSHOT) {
+      Snapshot(); // 判断根据信号获取的请求操作是不是与当前的SolverAction::SNAPSHOT一致，如果一致，
+                  // 则执行Snapshot()函数的语句  
+    }
+```
   可以执行`fg`命令使得被挂起的`caffe.bin`进程继续执行
-* `sigint_effect`和`sighup_effect`的值都被设置为`none`，即`caffe.bin`进程执行不会受到信号`ctrl+c`以及`ctrl+z`的影响
+* `sigint_effect`和`sighup_effect`的值都被设置为`none`，即`caffe.bin`进程执行不会受到信号`ctrl+c`即`SIGINT`信号以及`SIGHUP`信号(终端意外挂断)的影响
 
-* `caffe`设置了两种信号`SIGHUP`、`SIGINT`的处理响应机制，分别为`stop`(进程终止)、`snapshot`(进程挂起)、
-  `none`(进程执行不受信号干扰)， 并对其他的信号处理进行了屏蔽操作
+* `caffe`设置了两种信号`SIGHUP`、`SIGINT`的响应处理机制，分别为`stop`(进程终止)、`snapshot`(保存模型参数)、
+  `none`(进程执行不受这两种信号干扰)，由于`caffe`没有设置接收其他信号的处理机制，
+  所以会执行操作系统默认的信号响应处理机制
 
 ## nvcaffe关于layer初始化流程如下：  
 ![](docs/nvcaffe_solver_layer_init.png)  
