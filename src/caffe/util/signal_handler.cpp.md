@@ -42,7 +42,7 @@ return boost::bind(&SignalHandler::CheckForSignals, this);
 }
 ```
 ## `CheckForSignals`函数
-* `CheckForSignals`负责把接收到的信号与设置的默认操作一一对应起来，如果没有信号发送过来，则返回`SolverAction::NONE`
+* `CheckForSignals`负责把接收到的信号与自定义设置的默认操作一一对应起来，如果没有信号发送过来，则返回`SolverAction::NONE`
 
 ```c++
 SolverAction::Enum SignalHandler::CheckForSignals() const {

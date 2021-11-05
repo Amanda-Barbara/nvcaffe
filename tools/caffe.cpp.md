@@ -33,6 +33,26 @@ caffe::SignalHandler signal_handler(
   `none`(进程执行不受这两种信号干扰)，由于`caffe`没有设置接收其他信号的处理机制，
   所以会执行操作系统默认的信号响应处理机制
 
+## `solver->SetActionFunction`函数
+* `Solver::SetActionFunction`定义，目的是定义`action_request_function_`函数指针对象
+```c++
+void Solver::SetActionFunction(ActionCallback func) {
+  action_request_function_ = func;
+}
+```
+
+```c++
+solver->SetActionFunction(signal_handler.GetActionFunction());
+```
+上述语句的调用流程是
+```text
+1）solver->SetActionFunction(signal_handler.GetActionFunction());
+2）ActionCallback SignalHandler::GetActionFunction() const { return boost::bind(&SignalHandler::CheckForSignals, this);}
+3）SolverAction::Enum SignalHandler::CheckForSignals() const {...}
+```
+
+
+
 ## nvcaffe关于layer初始化流程如下：  
 ![](docs/nvcaffe_solver_layer_init.png)  
 [调试断点设置在`layer_factory.hpp`中的`return registry[layer_type](param, ftype, btype, solver_rank);`处](../include/caffe/layer_factory.hpp#L189)
