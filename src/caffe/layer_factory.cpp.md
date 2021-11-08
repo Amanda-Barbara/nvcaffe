@@ -40,6 +40,8 @@ REGISTER_LAYER_CREATOR(ReLU, GetReLULayer);
   }                                                                            \
   REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
 ```
-* `REGISTER_LAYER_CLASS(type)`宏定义中定义了一个名为`Creator_##type##Layer`函数，函数体是执行
-`CreateLayerBase<type##Layer>(param, ftype, btype);`并返回其执行结果，
+* `REGISTER_LAYER_CLASS(type)`宏定义中定义了一个名为`Creator_##type##Layer`函数作为静态变量`g_registry_`的
+  `value`，函数体`Creator_##type##Layer`是接收如下参数
+  `(const LayerParameter& param, Type ftype, Type btype, size_t)`
+  并执行`CreateLayerBase<type##Layer>(param, ftype, btype);`且返回`shared_ptr<LayerBase>`类型的对象，
   
