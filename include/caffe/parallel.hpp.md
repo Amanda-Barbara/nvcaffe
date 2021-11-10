@@ -7,5 +7,5 @@
 
 ## 参考链接
 * 1 [`P2PManager`类分析](https://blog.csdn.net/yiran103/article/details/81220278)
-* 2 [C++前向声明](https://www.cnblogs.com/wkfvawl/p/10801725.html)
-* 3 []()
+* 2 [`C++`前向声明](https://www.cnblogs.com/wkfvawl/p/10801725.html)
+* 3 [`static constexp`使用](https://blog.csdn.net/mxyhktk/article/details/112016564)
