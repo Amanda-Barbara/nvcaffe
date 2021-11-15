@@ -59,7 +59,7 @@ class InternalThread {
     }
   }
 
- protected:
+ protected:【】
   int target_device_;
   size_t rank_;
 
