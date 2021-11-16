@@ -1,8 +1,12 @@
 # parallel.hpp 代码解析
+每个`Solver`会创建线程运行`Solver::Reduce`，而`Solver::Reduce`会借由`Net::ReduceAndUpdate`
+调用`Net::Reduce`和`Solver::ApplyUpdate`，这意味着`Net::ForwardBackward`和`Net::ReduceAndUpdate`
+会异步执行。
 
 ## `P2PManager`类
 * `P2PSync`类使用了前向声明，`P2PManager`类声明了保护成员`vector<unique_ptr<P2PSync>> syncs_;`
 ![](../../docs/tutorial/include/caffe/P2PManager架构.png)
+  
 ## `P2PSync`类
 ```c++
 class P2PSync : public Solver::Callback, public InternalThread
@@ -20,6 +24,8 @@ class P2PSync : public Solver::Callback, public InternalThread
 ```
 `StartInternalThread`是`InternalThread`类的内部函数，内部实现了通过开启`boost::thread`线程
 来执行`InternalThread`类的`entry`函数，`entry`函数调用了子类实现的`InternalThreadEntry()`函数
+
+
 
 
 ## 参考链接
