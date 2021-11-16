@@ -25,7 +25,13 @@ class P2PSync : public Solver::Callback, public InternalThread
 `StartInternalThread`是`InternalThread`类的内部函数，内部实现了通过开启`boost::thread`线程
 来执行`InternalThread`类的`entry`函数，`entry`函数调用了子类实现的`InternalThreadEntry()`函数
 
-
+## `solve_bar_`与`solved_bar_`
+* `boost::barrier`是多线程的同步点，构造函数会要求传递一个数字，表示需要同步多少个线程。
+  只有指定个数的线程到达这个点之后，程序才会继续往下走，否则会阻塞。
+```c++
+  static unique_ptr<boost::barrier> solve_bar_;
+  static unique_ptr<boost::barrier> solved_bar_;
+```
 
 
 ## 参考链接
