@@ -53,5 +53,43 @@ shared_ptr<SharedScores<float>> shared_
 ```
 ![](../../docs/tutorial/src/caffe/P2PSync_InternalThreadEntry.png)
 
+## `P2PSync::InternalThreadEntry()`函数
+```c++
+void P2PSync::InternalThreadEntry() {
+  CHECK_EQ(nranks_, Caffe::solver_count());
+  CHECK_EQ(target_device_, Caffe::device());
+  const bool root = rank_ % (nranks_ / P2PManager::global_count()) == 0;
+  if (root) {
+    Caffe::set_root_solver(true);
+    solver_.swap(root_solver_);
+    solver_->root_add_callback(this);
+  }
+  solve_barrier();
+  if (!root) {
+    Caffe::set_root_solver(false);
+    solver_.reset(caffe::SolverRegistry::CreateSolver(solver_param_, root_solver_.get(), rank_));
+  }
+  solver_->set_callback(this);
+  ...
+```
+* 如果`root`为0将线程设置为根求解器，否则根据参数创建求解器。
+  `SolverRegistry::CreateSolver`借助`Registry`访问已注册的求解器。
+  如果是`root`线程则将自身设置为`root_callbacks_`的调用。
+  所有线程均将自身设置为`Solver`的`callback_`调用。
+  
+```c++
+  solve_barrier(); //开启线程同步屏障
+  NCCL_CHECK(ncclCommInitRank(&nccl_comm_,
+                              nranks_,
+                              mgr_->nccl_id(),
+                              rank_));
+  solve_barrier(); 
+```
+
 ## 参考链接
 * 1 [`P2PManager`类分析](https://blog.csdn.net/yiran103/article/details/81220278)
+* 2 [std::barrier线程同步屏障](https://en.cppreference.com/w/cpp/thread/barrier)
+* 3 [std::barrier线程同步屏障](https://zh.cppreference.com/w/cpp/thread/barrier)
+* 4 [std::barrier线程同步屏障样例](https://www.modernescpp.com/index.php/barriers-in-c-20)
+* 5 [自己总结的std::barrier教程](https://github.com/Amanda-Barbara/CPlusPlus-Tutorial/blob/master/concurrency/Threading_In_CPlusPlus/6.barrier/README.md)
+
