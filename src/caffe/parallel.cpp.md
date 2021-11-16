@@ -85,7 +85,9 @@ void P2PSync::InternalThreadEntry() {
                               rank_));
   solve_barrier(); 
 ```
-
+* 当关联的线程都执行到第一个出现的语句`solve_barrier()`时，才会去执行`ncclCommInitRank()`函数
+  当关联的线程都执行完函数`ncclCommInitRank()`后，方可各自执行后面的代码
+  
 ## 参考链接
 * 1 [`P2PManager`类分析](https://blog.csdn.net/yiran103/article/details/81220278)
 * 2 [std::barrier线程同步屏障](https://en.cppreference.com/w/cpp/thread/barrier)
