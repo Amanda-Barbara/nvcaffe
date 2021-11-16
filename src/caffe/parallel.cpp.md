@@ -37,7 +37,8 @@ shared_ptr<SharedScores<float>> shared_
     syncs_[i]->shared_ = this->shared_;
   }
 ```
-* 每个`P2PSync`类对象`syncs_[i]`启动线程
+* 每个`P2PSync`类对象`syncs_[i]`启动线程，`StartInternalThread`触发了`P2PSync::InternalThreadEntry`，
+并等待线程完成，最后再通过`Solver::perf_report(std::ostream& os, int device, int align)`输出性能报告
 ```c++
   LOG(INFO) << "Starting Optimization";
 

@@ -5,13 +5,21 @@
 
 ## `P2PManager`类
 * `P2PSync`类使用了前向声明，`P2PManager`类声明了保护成员`vector<unique_ptr<P2PSync>> syncs_;`
+
 ![](../../docs/tutorial/include/caffe/P2PManager架构.png)
   
 ## `P2PSync`类
+* `P2PSync`类继承了`Solver::Callback`类以及`InternalThread`类，`P2PSync`拥有两个`Solver`指针，
+  `solver_`和`root_solver_`
 ```c++
 class P2PSync : public Solver::Callback, public InternalThread
+protected:
+shared_ptr<Solver> solver_, root_solver_;
 ```
-* `P2PSync`类继承了`Solver::Callback`类以及`InternalThread`类，需要对`InternalThread`类的虚函数`InternalThreadEntry()`
+
+![](../../docs/tutorial/src/caffe/P2PSync.png)
+
+* 需要对`InternalThread`类的虚函数`InternalThreadEntry()`
   进行重写`void P2PSync::InternalThreadEntry()`，调用流程如下：
 ```c++
   for (int i = 0; i < syncs_.size(); ++i) {
