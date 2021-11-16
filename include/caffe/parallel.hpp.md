@@ -2,7 +2,7 @@
 
 ## `P2PManager`类
 * `P2PSync`类使用了前向声明，`P2PManager`类声明了保护成员`vector<unique_ptr<P2PSync>> syncs_;`
-
+![](../../docs/tutorial/include/caffe/P2PManager架构.png)
 ## `P2PSync`类
 ```c++
 class P2PSync : public Solver::Callback, public InternalThread
