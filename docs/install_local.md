@@ -32,7 +32,15 @@ sudo apt-get install libgflags-dev
 sudo dpkg -i libcudnn8_8.2.1.32-1+cuda11.3_amd64.deb
 sudo dpkg -i libcudnn8-dev_8.2.1.32-1+cuda11.3_amd64.deb
 ```
-
+* if use nccl
+```text
+cmake -DUSE_NCCL=ON
+# download `nccl-local-repo-ubuntu2004-2.8.4-cuda11.1_1.0-1_amd64.deb` package
+sudo dpkg -i nccl-local-repo-ubuntu2004-2.8.4-cuda11.1_1.0-1_amd64.deb 
+sudo apt-key add /var/nccl-local-repo-ubuntu2004-2.8.4-cuda11.1/7fa2af80.pub 
+sudo apt update 
+sudo apt install libnccl2 libnccl-dev 
+```
 ## cmake process
 ```
 /home/amanda/software/clion-2021.1.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/amanda/project/tutorial/NVCaffe/nvcaffe
