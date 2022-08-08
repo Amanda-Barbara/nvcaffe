@@ -56,3 +56,5 @@ Libturbojpeg library is used since 0.16.5. It has a packaging bug. Please execut
 sudo apt-get install libturbojpeg libturbojpeg0-dev
 sudo ln -s /usr/lib/x86_64-linux-gnu/libturbojpeg.so.0.1.0 /usr/lib/x86_64-linux-gnu/libturbojpeg.so
 ```
+
+## [install && build](docs/install_local.md)

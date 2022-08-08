@@ -1,0 +1,1 @@
+distribute/bin/caffe.bin train --solver=examples/cifar10/cifar10_quick_solver.prototxt --gpu all

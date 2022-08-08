@@ -42,7 +42,11 @@ sudo apt update
 sudo apt install libnccl2 libnccl-dev 
 ```
 ## cmake process
-```
+
+<details>
+<summary>cmake config
+</summary>
+<p align="left">
 /home/amanda/software/clion-2021.1.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/amanda/project/tutorial/NVCaffe/nvcaffe
 -- The C compiler identification is GNU 9.3.0
 -- The CXX compiler identification is GNU 9.3.0
@@ -151,7 +155,22 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/amanda/project/tutorial/NVCaffe/nvcaffe/cmake-build-debug
-
 [Previous CMake output restored: 2021/7/30 上午10:29]
+</p>
 
+</details>
+
+## 通过`Makefile`文件进行构建
+```shell
+# cp -rf Makefile.config.example Makefile.config
+# 修改Makefile.config配置文件中所用到的参数
+make all -j33
+make distribute -j33
+sudo vim ~/.bashrc
+# add commond like below:
+#export LD_LIBRARY_PATH=/home/e00130/workspace/tutorial/caffe/nvcaffe/distribute/lib:$LD_LIBRARY_PATH
+#export PYTHONPATH=/home/e00130/workspace/tutorial/caffe/nvcaffe/distribute/python:$PYTHONPATH
+source ~/.bashrc
 ```
+
+
